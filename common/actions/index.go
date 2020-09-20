@@ -2,14 +2,14 @@ package actions
 
 import (
 	"errors"
-	dto2 "go-admin/common/dto"
-	"go-admin/common/models"
+	dto2 "go-api/common/dto"
+	"go-api/common/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"go-admin/tools"
-	"go-admin/tools/app"
+	"go-api/tools"
+	"go-api/tools/app"
 )
 
 // IndexAction 通用查询动作

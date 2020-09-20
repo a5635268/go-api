@@ -2,15 +2,15 @@ package actions
 
 import (
 	"errors"
-	dto2 "go-admin/common/dto"
-	"go-admin/common/models"
-	"go-admin/tools/app"
+	dto2 "go-api/common/dto"
+	"go-api/common/models"
+	"go-api/tools/app"
 	"gopkg.in/ffmt.v1"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"go-admin/tools"
+	"go-api/tools"
 )
 
 // ViewAction 通用详情动作

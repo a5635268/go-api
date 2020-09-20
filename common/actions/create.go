@@ -3,12 +3,12 @@ package actions
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	dto2 "go-admin/common/dto"
-	"go-admin/common/models"
+	dto2 "go-api/common/dto"
+	"go-api/common/models"
 	"gorm.io/gorm"
 
-	"go-admin/tools"
-	"go-admin/tools/app"
+	"go-api/tools"
+	"go-api/tools/app"
 )
 
 // CreateAction 通用新增动作

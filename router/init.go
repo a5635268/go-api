@@ -35,5 +35,8 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 	// 注册业务路由
 	InitApiRouter(r)
 
+	// 404捕获
+	r.NoRoute(handler.HandleNotFound())
+
 	return r
 }

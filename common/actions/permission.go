@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-admin/tools/config"
+	"go-api/tools/config"
 	"gorm.io/gorm"
 
-	"go-admin/tools"
+	"go-api/tools"
 )
 
 type dataPermission struct {

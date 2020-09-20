@@ -68,23 +68,12 @@ func run() error {
 	if engine == nil {
 		engine = gin.New()
 	}
-
-	var r *gin.Engine
-	switch engine.(type) {
-	case *gin.Engine:
-		r = engine.(*gin.Engine)
-	default:
-		panic("not support this engine")
-	}
-
-	r = router.InitRouter(r)
+	r := router.InitRouter(engine.(*gin.Engine))
 	global.Cfg.SetEngine(r)
-
 	srv := &http.Server{
 		Addr:    config.ApplicationConfig.Host + ":" + config.ApplicationConfig.Port,
 		Handler: global.Cfg.GetEngine(),
 	}
-
 	go func() {
 		// 服务连接
 		if config.SslConfig.Enable {
@@ -119,6 +108,6 @@ func run() error {
 }
 
 func tip() {
-	usageStr := `欢迎使用 ` + tools.Green(`go-admin `+global.Version) + ` 可以使用 ` + tools.Red(`-h`) + ` 查看命令`
+	usageStr := `欢迎使用 ` + tools.Green(`go-api `+global.Version) + ` 可以使用 ` + tools.Red(`-h`) + ` 查看命令`
 	fmt.Printf("%s \n\n", usageStr)
 }

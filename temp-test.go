@@ -1,6 +1,8 @@
 package main
 
 /*func main() {
-	println(2222)
+	errStr := "hahaha#222"
+	p := strings.Split(errStr, "#")
+	println(p)
 }
 */

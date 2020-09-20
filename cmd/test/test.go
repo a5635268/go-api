@@ -37,6 +37,9 @@ func setup() {
 }
 
 func run() error {
-	tools.Print("ceshiceshi")
+	var x interface{}
+	x = "Hello 沙河"
+	v := x.(string)
+	tools.Print(v)
 	return nil
 }
