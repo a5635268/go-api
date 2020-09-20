@@ -1,0 +1,14 @@
+.idea
+static/uploadfile
+temp/
+!temp
+vendor
+config/settings.dev.yml
+common/middleware/demo.go
+config/settings.dev.b.yml
+temp/logs
+config/settings.dev.yml.log
+config/settings.b.dev.yml
+cmd/migrate/migration/version-local/*
+/note.md
+/go-api.exe
