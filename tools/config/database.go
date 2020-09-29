@@ -8,7 +8,6 @@ type Database struct {
 }
 
 func InitDatabase(cfg *viper.Viper) *Database {
-
 	db := &Database{
 		Driver: cfg.GetString("driver"),
 		Source: cfg.GetString("source"),

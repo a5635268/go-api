@@ -1,20 +1,24 @@
-package cache
+package redis
 
 import (
-	"time"
-
 	"github.com/go-redis/redis/v7"
 	"github.com/matchstalk/go-admin-core/cache"
 	"github.com/matchstalk/redisqueue"
+	"go-api/common/global"
+	"go-api/tools"
+	"go-api/tools/config"
+	"time"
 )
 
-var RedisAdapter Adapter
+func Setup()  {
+	host := config.RedisConfig.Host
+	port := config.RedisConfig.Port
 
-func InitRedis() error {
-	RedisAdapter = &cache.Redis{
+	redis := &cache.Redis{
 		ConnectOption: &redis.Options{
-			Addr: "127.0.0.1:6379",
+			Addr: host + ":" + tools.IntToString(port),
 		},
+		// 只有redis5版本以上才支持
 		ConsumerOptions: &redisqueue.ConsumerOptions{
 			VisibilityTimeout: 60 * time.Second,
 			BlockingTimeout:   5 * time.Second,
@@ -27,6 +31,10 @@ func InitRedis() error {
 			ApproximateMaxLength: true,
 		},
 	}
-	err := RedisAdapter.Connect()
-	return err
+
+	err := redis.Connect()
+	if err != nil{
+		panic("redis connect err")
+	}
+	global.Redis = redis
 }

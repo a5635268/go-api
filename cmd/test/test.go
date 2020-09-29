@@ -1,12 +1,15 @@
 package test
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"go-api/common/database"
 	"go-api/common/global"
 	"go-api/pkg/logger"
-	"go-api/tools"
+	"go-api/pkg/queue"
+	"go-api/pkg/redis"
 	"go-api/tools/config"
+	"time"
 )
 
 var (
@@ -31,15 +34,41 @@ func setup() {
 	logger.Setup()
 	//3. 初始化数据库链接
 	database.Setup()
+	//4. 初始化redis-cache
+	redis.Setup()
+	//5. 初始化queue
+	queue.SetUp()
 
 	usageStr := `starting test`
 	global.Logger.Debug(usageStr)
 }
 
 func run() error {
-	var x interface{}
-	x = "Hello 沙河"
-	v := x.(string)
-	tools.Print(v)
+	defer CountTime(time.Now())
+	test()
 	return nil
+}
+
+func test()  {
+
+}
+
+func test1() {
+	zsetKey := "zsettest"
+	redis := global.Redis.GetClient()
+	ret, err := redis.ZRevRangeWithScores(zsetKey, 0, 2).Result()
+	if err != nil {
+		fmt.Printf("zrevrange failed, err:%v\n", err)
+		return
+	}
+	for _, z := range ret {
+		fmt.Println(z.Member, z.Score)
+	}
+}
+
+// 运行时间计算
+func CountTime(startTime time.Time)  {
+	// 开始时间
+	terminal := time.Since(startTime)
+	global.Logger.File("debug").Debugf("运行时间 %v", terminal)
 }

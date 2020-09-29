@@ -22,6 +22,9 @@ var cfgJwt *viper.Viper
 // Log配置项
 var cfgLogger *viper.Viper
 
+// Redis配置项
+var cfgRedis *viper.Viper
+
 // Ssl配置项 非必须
 var cfgSsl *viper.Viper
 
@@ -59,6 +62,12 @@ func Setup(path string) {
 		panic("No found settings.jwt in the configuration")
 	}
 	JwtConfig = InitJwt(cfgJwt)
+
+	cfgRedis = viper.Sub("settings.redis")
+	if cfgRedis == nil {
+		panic("No found settings.redis in the configuration")
+	}
+	RedisConfig = InitRedis(cfgRedis)
 
 	cfgLogger = viper.Sub("settings.logger")
 	if cfgLogger == nil {

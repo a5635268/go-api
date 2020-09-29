@@ -3,6 +3,7 @@ package middleware
 import "github.com/gin-gonic/gin"
 
 func InitMiddleware(r *gin.Engine) {
+	// 注意顺序
 	// 日志处理
 	r.Use(LoggerToFile())
 	// 自定义错误处理

@@ -38,6 +38,9 @@ func CustomError(c *gin.Context) {
 						"code": statusCode,
 						"msg":  p[2],
 					})
+					if statusCode == 1011 {
+						c.Abort()
+					}
 				}
 			default:
 				panic(err)

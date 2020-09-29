@@ -8,6 +8,10 @@ import (
 func Print(e ...interface{}) {
 	for _, v := range e {
 		fmt.Printf("\n")
+		if v == nil {
+			fmt.Printf("%T: %#v\n",v,v)
+			return
+		}
 		kind := reflect.TypeOf(v).Kind()
 		switch kind {
 		case reflect.Struct:
@@ -22,6 +26,5 @@ func Print(e ...interface{}) {
 		default:
 			fmt.Printf("%T: %#v\n",v,v)
 		}
-		fmt.Printf("\n")
 	}
 }

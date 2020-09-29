@@ -3,6 +3,8 @@ package api
 import (
 	"context"
 	"fmt"
+	"go-api/pkg/queue"
+	"go-api/pkg/redis"
 	"go-api/router"
 	"io/ioutil"
 	"net/http"
@@ -54,10 +56,13 @@ func setup() {
 	logger.Setup()
 	//3. 初始化数据库链接
 	database.Setup()
+	//4. 初始化redis-cache
+	redis.Setup()
+	//5. 初始化queue
+	queue.SetUp()
 
 	usageStr := `starting api server`
 	global.Logger.Info(usageStr)
-
 }
 
 func run() error {
