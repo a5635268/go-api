@@ -4,7 +4,7 @@ import "github.com/gookit/validate"
 
 var (
 	// 验证器错误
-	ErrorCode = 1011
+	VerifyErrorCode = 1011
 )
 
 

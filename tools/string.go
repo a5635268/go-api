@@ -91,3 +91,12 @@ func SliceToJsonStr(e interface{}) (string, error) {
 		return "", err
 	}
 }
+
+func JsonStrToSlice(e string) ([]interface{}, error) {
+	var s []interface{}
+	if err := json.Unmarshal([]byte(e), &s); err == nil {
+		return s,nil
+	} else {
+		return nil,err
+	}
+}

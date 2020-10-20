@@ -26,8 +26,8 @@ func (f User) Translates() map[string]string {
 	}
 }
 
-// Messages 您可以自定义验证器错误消息
 // 优先级高
+// Messages 您可以自定义验证器错误消息
 func (f User) Messages() map[string]string {
 	return validate.MS{
 		"required": "{field} 不能为空",
@@ -38,10 +38,10 @@ func Test() gin.HandlerFunc{
 	return func(c *gin.Context) {
 		var data User
 		err := c.ShouldBind(&data)
-		tools.HasError(err, "",ErrorCode)
+		tools.HasError(err, "", VerifyErrorCode)
 
 		v := validate.Struct(data)
-		tools.Assert(v.Validate(),v.Errors.One(),ErrorCode)
+		tools.Assert(v.Validate(),v.Errors.One(),VerifyErrorCode)
 
 		c.Set(c.Request.Method + "Param",data)
 		c.Next()

@@ -7,6 +7,7 @@ type Response struct {
 	Data interface{} `json:"data"`
 	// 消息
 	Msg string `json:"msg"`
+	RequestId string `json:"requestId"`
 }
 
 type Page struct {

@@ -32,6 +32,8 @@ Use "go-api [command] --help" for more information about a command.
 go get github.com/beego/bee
 bee run -runargs="server -c=config/settings.dev.yml"
 
+# 一般用于脚本调试用
+go get github.com/codegangsta/gin
 gin run main.go
 ```
 
@@ -99,4 +101,10 @@ message := queue.Msg{100, "队列1", 43}
 msg := queredis.NewMessage("", time.Now().Add(time.Second*1), message)
 _, err := global.Queue1.Publish(msg)
 tools.HasError(err,"")
+```
+
+### Gorm定制化
+
+```go
+
 ```

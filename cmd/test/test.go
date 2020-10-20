@@ -1,13 +1,13 @@
 package test
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"go-api/common/database"
 	"go-api/common/global"
+	"go-api/common/models"
 	"go-api/pkg/logger"
-	"go-api/pkg/queue"
 	"go-api/pkg/redis"
+	"go-api/tools"
 	"go-api/tools/config"
 	"time"
 )
@@ -32,12 +32,11 @@ func setup() {
 	config.Setup(configYml)
 	//2. 设置日志
 	logger.Setup()
-	//3. 初始化数据库链接
-	database.Setup()
 	//4. 初始化redis-cache
 	redis.Setup()
-	//5. 初始化queue
-	queue.SetUp()
+	//3. 初始化数据库链接
+	database.Setup()
+
 
 	usageStr := `starting test`
 	global.Logger.Debug(usageStr)
@@ -49,21 +48,27 @@ func run() error {
 	return nil
 }
 
-func test()  {
 
+type Time struct {
+	Id int `json:"id" gorm:"primary_key;AUTO_INCREMENT" cache:"1000"`
+	Name string `json:"name"`
+	Create_time int `json:"create_time" gorm:"autoCreateTime"`      // 使用秒级时间戳填充创建时间
+	Update_time int `json:"update_time" gorm:"autoUpdateTime"`
+	CacheInterval int `json:"-"`
+	*models.Cache `json:"-"`
 }
 
-func test1() {
-	zsetKey := "zsettest"
-	redis := global.Redis.GetClient()
-	ret, err := redis.ZRevRangeWithScores(zsetKey, 0, 2).Result()
-	if err != nil {
-		fmt.Printf("zrevrange failed, err:%v\n", err)
-		return
-	}
-	for _, z := range ret {
-		fmt.Println(z.Member, z.Score)
-	}
+func (t Time) TableName() string {
+  return "test_time"
+}
+
+
+func test()  {
+	db := global.Eloquent
+	var time []Time
+	_ = db.Find(&time)
+	global.Logger.Info(time)
+	tools.Print(time)
 }
 
 // 运行时间计算
