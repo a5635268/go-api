@@ -20,10 +20,7 @@ Available Commands:
   server      Start API server
   test        用于测试语法的命令
 
-Flags:
-  -h, --help   help for go-api
-
-Use "go-api [command] --help" for more information about a command.
+# 命令扩展：cmd/cobra.go:42
 ```
 
 ### 基于`bee`和`gin`的热更新
@@ -105,6 +102,19 @@ tools.HasError(err,"")
 
 ### Gorm定制化
 
-```go
+#### 缓存定制
 
+```go
+type Time struct {
+    // 主键tag：cache。缓存时间。默认取config.redis.ttl
+	Id int `json:"id" gorm:"primary_key;AUTO_INCREMENT" cache:"1000"`
+	Name string `json:"name"`
+	CreateTime int `json:"create_time" gorm:"autoCreateTime"` // 使用秒级时间戳填充创建时间      
+	UpdateTime int `json:"update_time" gorm:"autoUpdateTime"`
+    // 嵌入匿名结构体，开启缓存
+	models.Cache `json:"-"`
+}
+db := global.Eloquent
+var time []Time
+_ = db.Find(&time)
 ```

@@ -54,7 +54,6 @@ type Time struct {
 	Name string `json:"name"`
 	Create_time int `json:"create_time" gorm:"autoCreateTime"`      // 使用秒级时间戳填充创建时间
 	Update_time int `json:"update_time" gorm:"autoUpdateTime"`
-	CacheInterval int `json:"-"`
 	*models.Cache `json:"-"`
 }
 
