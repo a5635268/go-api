@@ -118,3 +118,66 @@ db := global.Eloquent
 var time []Time
 _ = db.Find(&time)
 ```
+
+**Gorm回调笔记**
+
+```go
+// 当前 Model 的所有字段
+db.Statement.Schema.Fields
+
+// 当前 Model 的所有主键字段
+db.Statement.Schema.PrimaryFields
+
+// 优先主键字段：带有 db 名为 `id` 或定义的第一个主键字段。
+db.Statement.Schema.PrioritizedPrimaryField
+
+// 当前 Model 的所有关系
+db.Statement.Schema.Relationships
+
+// 当前实例化的model(取值结果集)
+db.Statement.ReflectValue
+
+// 根据 db 名或字段名查找字段
+field := db.Statement.Schema.LookUpField("Name")
+```
+
+### jwt支持
+
+~~~go
+// 登录鉴权代码： common/middleware/handler/auth.go:35
+
+// token获取途径，header: Authorization, query: token, cookie: jwt
+
+// 控制器获取
+uid,_ :=  c.Get("uid")
+username,_ := c.Get("username")
+openid,_ := c.Get("openid")
+data,_ := c.Get("JWT_PAYLOAD")
+result := map[string]interface{}{
+    "uid" : uid,
+    "username" : username,
+    "openid" : openid,
+    "data" : data,
+}
+app.OK(c, result, "")
+~~~
+
+### 计划任务
+
+~~~go
+// 配置计划任务： pkg/cronjob/joblist.go:8
+{
+    InvokeTarget:   "ExamplesOne",
+    Name:           "exec test",
+    JobId:          1,
+    EntryId:        0, 
+    CronExpression: "*/5 * * * * *", // 以秒开始，其它参考Linux crontab
+    Args:           "参数",
+    JobType:           2,  // 1，http。2，exec函数调用。
+}
+
+// 启动计划任务
+// go build mian.go && ./go-api job
+
+// 停掉计划任务： 杀掉进程就可以了
+~~~

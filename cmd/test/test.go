@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"go-api/common/database"
 	"go-api/common/global"
-	"go-api/common/models"
+	"go-api/common/model"
 	"go-api/pkg/logger"
 	"go-api/pkg/redis"
 	"go-api/tools"
@@ -50,11 +50,11 @@ func run() error {
 
 
 type Time struct {
-	Id int `json:"id" gorm:"primary_key;AUTO_INCREMENT" cache:"1000"`
-	Name string `json:"name"`
-	Create_time int `json:"create_time" gorm:"autoCreateTime"`      // 使用秒级时间戳填充创建时间
-	Update_time int `json:"update_time" gorm:"autoUpdateTime"`
-	*models.Cache `json:"-"`
+	Id           int `json:"id" gorm:"primary_key;AUTO_INCREMENT" cache:"1000"`
+	Name         string `json:"name"`
+	Create_time  int `json:"create_time" gorm:"autoCreateTime"`      // 使用秒级时间戳填充创建时间
+	Update_time  int `json:"update_time" gorm:"autoUpdateTime"`
+	*model.Cache `json:"-"`
 }
 
 func (t Time) TableName() string {

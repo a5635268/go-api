@@ -43,7 +43,7 @@ func Test() gin.HandlerFunc{
 		v := validate.Struct(data)
 		tools.Assert(v.Validate(),v.Errors.One(),VerifyErrorCode)
 
-		c.Set(c.Request.Method + "Param",data)
+		c.Set(c.Request.Method+"Param", data)
 		c.Next()
 	}
 }

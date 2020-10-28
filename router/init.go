@@ -32,8 +32,12 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 	r.Use(middleware.WithContextDb(gormDB))
 	middleware.InitMiddleware(r)
 
+	// jwt注册
+	authMiddleware, error :=  middleware.AuthInit()
+	tools.HasError(error, "JWT Init Error", 500)
+
 	// 注册业务路由
-	InitApiRouter(r)
+	InitApiRouter(r, authMiddleware)
 
 	// 404捕获
 	r.NoRoute(handler.HandleNotFound())

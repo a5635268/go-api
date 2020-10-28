@@ -206,16 +206,11 @@ var (
 	// IdentityKey default identity key
 	IdentityKey = "identity"
 
-	NiceKey = "nice"
+	UserNameKey = "nickname"
 
-	DataScopeKey = "datascope"
+	Uid = "uid"
 
-	RKey      = "r"
-	RoleIdKey = "roleid"
-
-	RoleKey = "rolekey"
-
-	RoleNameKey = "rolename"
+	OpenIdKey = "openid"
 )
 
 // New for check error with GinJWTMiddleware

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"go-api/cmd/api"
+	"go-api/cmd/job"
 	"go-api/cmd/test"
 	"os"
 
@@ -37,6 +38,7 @@ func tip() {
 }
 
 func init() {
+	rootCmd.AddCommand(job.StartCmd)
 	rootCmd.AddCommand(test.StartCmd)
 	rootCmd.AddCommand(api.StartCmd)
 	rootCmd.AddCommand(config.StartCmd)

@@ -17,3 +17,17 @@ func Test(c *gin.Context) {
 	tools.Print(result,err)
 	app.OK(c, result, "")
 }
+
+func Auth(c *gin.Context)  {
+	uid,_ :=  c.Get("uid")
+	username,_ := c.Get("username")
+	openid,_ := c.Get("openid")
+	data,_ := c.Get("JWT_PAYLOAD")
+	result := map[string]interface{}{
+		"uid" : uid,
+		"username" : username,
+		"openid" : openid,
+		"data" : data,
+	}
+	app.OK(c, result, "")
+}

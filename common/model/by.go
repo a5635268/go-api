@@ -1,4 +1,4 @@
-package models
+package model
 
 type ControlBy struct {
 	CreateBy uint `gorm:"index;comment:'创建者'"`

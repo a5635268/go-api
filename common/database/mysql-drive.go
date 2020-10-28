@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"go-api/common/models"
+	"go-api/common/model"
 	"go-api/pkg/redis"
 	"gorm.io/gorm/callbacks"
 	"log"
@@ -99,7 +99,7 @@ func queryCallback(db *gorm.DB) {
 			sql := db.Statement.SQL.String()
 			ks := db.Statement.ReflectValue.Kind().String()
 			cachekey := redis.GetSqlKey(sql+ks)
-			cacheRows,err := models.GetCacheRows(cachekey)
+			cacheRows,err := model.GetCacheRows(cachekey)
 			if len(cacheRows) > 0 && err == nil{
 				switch db.Statement.ReflectValue.Kind() {
 				case reflect.Slice, reflect.Array:
