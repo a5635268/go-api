@@ -14,8 +14,12 @@ func Index(c *gin.Context) {
 
 func Test(c *gin.Context) {
 	result, err := c.Get("_data")
+	args :=  c.DefaultQuery("args", "1")
+	if args == "2"{
+		panic("cuowu")
+	}
 	tools.Print(result,err)
-	app.OK(c, result, "")
+	app.OK(c, result, "hahaha")
 }
 
 func Auth(c *gin.Context)  {

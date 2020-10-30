@@ -99,7 +99,7 @@ func run() error {
 	fmt.Printf("-  Network: http://%s:%s/ \r\n", tools.GetLocaHonst(), config.ApplicationConfig.Port)
 	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
 	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
+	signal.Notify(quit, os.Interrupt, os.Kill)
 	<-quit
 	fmt.Printf("%s Shutdown Server ... \r\n", tools.GetCurrentTimeStr())
 

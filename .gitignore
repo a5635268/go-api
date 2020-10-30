@@ -11,4 +11,4 @@ config/settings.dev.yml.log
 config/settings.b.dev.yml
 cmd/migrate/migration/version-local/*
 /note.md
-/go-api.exe
+.exe

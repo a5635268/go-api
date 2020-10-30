@@ -181,3 +181,170 @@ app.OK(c, result, "")
 
 // 停掉计划任务： 杀掉进程就可以了
 ~~~
+
+## 部署
+
+### nginx配置
+
+~~~
+server {
+    listen       80;
+    server_name  go.example.com;
+
+    access_log  /var/log/nginx/go.example.com.access.log  main;
+
+    # 开启debug日志进行配置调试，正式改为warn
+    error_log  /var/log/nginx/go.example.com.error.log  debug;
+    
+    location / {
+      proxy_set_header   Host             $http_host;
+      proxy_set_header   X-Real-IP        $remote_addr;
+      proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+      proxy_set_header   X-Forwarded-Proto  $scheme;
+      rewrite ^/(.*)$ /$1 break;
+      proxy_pass  http://172.28.3.126:8000;
+    }
+}
+~~~
+
+### supervisor配置
+
+~~~
+[program:go-api]
+directory=/home/go/go-api
+command=./start.sh
+startsecs=3
+stderr_logfile=/tmp/supervisord_go-api.log 
+stdout_logfile=/tmp/supervisord_go-api.log  
+user = root 
+redirect_stderr = true
+stdout_logfile_maxbytes = 20MB
+stdout_logfile_backups = 20
+
+[supervisord]
+[supervisorctl]
+~~~
+
+**supervisor相关命令**
+
+~~~
+# 启动,启动之前先确认关了没
+supervisord -c /etc/supervisord.conf
+
+# 管理
+supervisorctl status 
+supervisorctl stop/start [process name or all]
+supervisorctl shutdown
+supervisorctl reload
+
+# 配置开机启动
+systemctl enable supervisord
+# 验证开机启动是否成功： enabled
+systemctl is-enabled supervisord
+
+# 日志
+# supervisor日志
+tail -f /var/log/supervisor/supervisord.log
+
+# 应用日志
+tail -f /tmp/supervisord_go-api.log
+~~~
+
+### 部署脚本
+
+~~~
+Makefile # 编译脚本
+build.sh # 交叉编译示例
+start.sh # 重新编译后启动（注意：非supervisor情况）
+~~~
+
+### 临时部署（守护进程管理）
+
+#### tmux
+
+- [Tmux 使用教程](http://www.ruanyifeng.com/blog/2019/10/tmux.html)
+
+~~~
+yum -y install tmux
+tmux new -s go-api
+./go-api # 可以直接关掉窗口，进程不会段
+ctrl + B & D # 退出
+tmux ls # 查看
+tmux attach -t go-api # 进入窗口
+~~~
+
+#### systemctl
+
+- [Systemd 入门教程](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)
+
+~~~
+[Unit]
+# 单元描述
+Description=GO-API
+# 在什么服务启动之后再执行本程序
+After=mysql.service
+
+[Service]
+Type=simple
+# 程序执行的目录
+WorkingDirectory=/data/server/goapi/
+# 启动的脚本命令
+ExecStart=/data/server/goapi/goapi
+# 重启条件
+Restart=alway
+# 几秒后重启
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+~~~
+
+1.  创建应用配置文件 `/etc/systemd/system/go-api.service`, 内容如上;
+2.  使用 `systemctl daemon-reload` 重新加载服务;
+3.  执行 `systemctl start go-api` 来启动服务;
+4.  最后执行 `systemctl status go-api` 来查看服务运行的状态信息;
+5.  执行 `systemctl enable go-api` 将服务添加到开机启动项;
+6.  注意：执行的 `go-api` 是使用文件名作为服务名;
+7.  常见的命令有: `start(启动), stop(停止), restart(重启), status(查看运行状态), enable(添加到开机启动项), disable(将程序从开机启动中移除)`
+
+#### screen
+
+~~~
+screen -S yourname -> 新建一个叫 yourname 的 session
+screen -ls -> 列出当前所有的 session
+screen -r yourname -> 回到 yourname 这个 session
+screen -d yourname -> 远程detach某个 session
+screen -d -r yourname -> 结束当前 session 并回到 yourname 这个 session
+~~~
+
+1. 使用命令 `screen -S go-api` 创建一个 session;
+2. 在新终端窗口中执行 `./go-api` 即可；
+3. 执行 `ctrl-a, ctrl-d` 暂时离开当前session;
+4. 执行 `screen -r go-api` 返回命令窗口; 若返回不成功, 可能是该窗口被占用(Attached)了, 可以尝试使用 `screen -Dr go-api`;
+5. 执行 `screen -X -S go-api quit` 结束程序;
+
+### 容器部署 
+
+~~~
+FROM golang:alpine as builder
+# 创建镜像1，用于编译go
+ENV GOPROXY=https://goproxy.cn,https://goproxy.io,direct \
+    GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+WORKDIR /go/src/go-api
+RUN go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
+COPY . .
+RUN go env && go list && go build -v -a -o go-api .
+
+# 二段编译： 创建mini镜像2，用于运行go
+# docker build . -t  go-api
+# docker run -p 9001:8000 go-api
+FROM scratch
+COPY --from=builder /go/src/go-api/config /config
+COPY --from=builder /go/src/go-api/go-api /
+#CMD ["/bin/bash"]
+ENTRYPOINT ["/go-api","server","-c=config/settings.dev.yml"]
+~~~
