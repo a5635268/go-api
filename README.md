@@ -359,6 +359,43 @@ docker-compse up -d
 
 ## DevOps
 
-~~~
-2
+**通过github打包同步到目标主机**
+
+~~~yaml
+name: Github actions demo
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: GitHub Actions演示
+    runs-on: ubuntu-latest
+    steps:
+      - name: environment prepare stage
+        env:
+          MY_VAR: Hi world! My name is
+          FIRST_NAME: zhou
+          MIDDLE_NAME: xiao
+          LAST_NAME: gang
+        run:
+          echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+      - name: Set up Go 1.14 stage
+        uses: actions/setup-go@v1
+        id: go
+        with:
+          go-version: 1.14.7
+      - name: Checkout stage
+        uses: actions/checkout@master
+      - name: build stage
+        run: go build -o go-api .
+      - name: Deploy stage
+        uses: easingthemes/ssh-deploy@v2.1.2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: "go-api"
+          TARGET: ${{ secrets.REMOTE_TARGET }}
 ~~~
