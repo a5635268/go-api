@@ -356,3 +356,9 @@ ENTRYPOINT ["/go-api","server","-c=config/settings.dev.yml"]
 cd docker-compose
 docker-compse up -d
 ~~~
+
+## DevOps
+
+~~~
+
+~~~
