@@ -32,5 +32,5 @@ jobs:
           ARGS: "-rltgoDzvO"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "go-api.zip"
+          SOURCE: "go-api"
           TARGET: ${{ secrets.REMOTE_TARGET }}
