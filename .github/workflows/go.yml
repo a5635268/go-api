@@ -42,4 +42,4 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script_stop: true
           script: |
-            cd /home/wwwroot/go && ./go-api job
+            cd /home/wwwroot/go && ./start.sh
