@@ -349,3 +349,10 @@ COPY --from=builder /go/src/go-api/go-api /
 #CMD ["/bin/bash"]
 ENTRYPOINT ["/go-api","server","-c=config/settings.dev.yml"]
 ~~~
+
+### 容器编排
+
+~~~
+cd docker-compose
+docker-compse up -d
+~~~

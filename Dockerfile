@@ -7,7 +7,6 @@ ENV GOPROXY=https://goproxy.cn,https://goproxy.io,direct \
     GOARCH=amd64
 
 WORKDIR /go/src/go-api
-RUN go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
 COPY . .
 RUN go env && go list && go build -v -a -o go-api .
 
