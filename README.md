@@ -359,7 +359,7 @@ docker-compse up -d
 
 ## DevOps
 
-**通过github打包同步到目标主机**
+### 基于`GitHub actions`
 
 ~~~yaml
 name: Github actions demo
@@ -398,6 +398,28 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: "go-api"
           TARGET: ${{ secrets.REMOTE_TARGET }}
+      - name: Update the API service
+        uses: appleboy/ssh-action@v0.0.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script_stop: true
+          script: |
+            cd /home/wwwroot/go && ./start.sh
+~~~
+
+**start.sh**
+
+~~~shell script
+#!/bin/bash
+echo "删除进程"
+killall go-api #杀死运行中的go-api服务进程
+echo "启动进程"
+# nohup ./go-api server -c=config/settings.dev.yml >> access.log 2>&1 & #后台启动服务将日志写入access.log文件
+nohup ./go-api job >> access.log 2>&1 & #后台启动服务将日志写入access.log文件
+ps -aux | grep go-api #查看运行用的进程
+netstat -tnlap #查看启动启动情况
 ~~~
 
 2
