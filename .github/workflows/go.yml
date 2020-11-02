@@ -10,9 +10,9 @@ jobs:
     steps:
       - name: environment prepare stage
         env:
-          MY_VAR: Hi there! My name is
-          FIRST_NAME: Mona
-          MIDDLE_NAME: The
-          LAST_NAME: Octocat
+          MY_VAR: Hi world! My name is
+          FIRST_NAME: zhou
+          MIDDLE_NAME: xiao
+          LAST_NAME: gang
         run:
           echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
