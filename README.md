@@ -40,8 +40,9 @@ gin run main.go
 // 错误断言
 panic("CustomError#" + strconv.Itoa(statusCode) + "#" + msg)
 
-// common/middleware/customerror.go:19
 // 此处进行扩展
+// common/middleware/customerror.go:19
+
 
 // 404捕获
 // router/init.go:39

@@ -3,7 +3,6 @@ static/uploadfile
 temp/
 !temp
 vendor
-config/settings.dev.yml
 common/middleware/demo.go
 config/settings.dev.b.yml
 temp/logs
