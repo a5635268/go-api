@@ -455,5 +455,6 @@ netstat -tnlap #查看启动启动情况
 
 - **webhooks**
 
+![查看设置图片](static/webhooks.png)
 
 
