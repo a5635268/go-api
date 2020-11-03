@@ -13,7 +13,7 @@ type ExamplesOne struct {
 func (t ExamplesOne) Exec(arg interface{}) error {
 	str := time.Now().Format(timeFormat) + " [INFO] JobCore ExamplesOne exec success"
 
-	global.JobLogger.Info("22222222222222222222222222")
+	global.JobLogger.Info("33333")
 
 	// TODO: 这里需要注意 Examples 传入参数是 string 所以 arg.(string)；请根据对应的类型进行转化；
 	switch arg.(type) {
