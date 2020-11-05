@@ -459,7 +459,9 @@ netstat -tnlap #查看启动启动情况
 
 ## 集群
 
-### 基于(`syncd`)[https://syncd.cc/docs/#/] 
+### 基于`syncd`
+
+文档： https://syncd.cc/docs/#/
 
 > 1. 创建集群
 > 2. 集群服务器秘钥配置
@@ -467,3 +469,5 @@ netstat -tnlap #查看启动启动情况
 > 4. 构建配置：拉git，打tar包
 > 5. 提交发布申请
 > 6. 发布单管理 -> 上线 -> 构建 -> 部署
+
+分支测试
